@@ -1,7 +1,11 @@
 const container_div = document.querySelector('.container');
 const addBook_button = document.querySelector('.add-book');
-
-addBook_button.onclick = () => addBookToLibrary();
+const inputForm_form = document.querySelector('form');
+const title_input = document.getElementById('title');
+const author_input = document.getElementById('author');
+const totalPages_input = document.getElementById('page-number');
+const readStatus_input = document.getElementById('read-status');
+const submitForm_button = document.querySelector('button[type="submit"]');
 
 let myLibrary = [
     {
@@ -18,6 +22,17 @@ let myLibrary = [
 }
 ];
 
+addBook_button.onclick = () => showForm();
+
+function showForm() {
+    inputForm_form.classList.toggle('show-onclick');
+}
+
+//DOMContentLoaded just makes sure the page is loaded before we try to run things
+document.addEventListener('DOMContentLoaded', () => {
+    submitForm_button.addEventListener('click', e => addBookToLibrary(e));
+})
+
 function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
@@ -25,15 +40,12 @@ function Book(title, author, pages, read) {
     this.read = read;
 }
 
-// Book.prototype.info = function() {
-//     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`    
-// };
-
-function addBookToLibrary() {
-    let title = prompt('what title');
-    let author = prompt('what author');
-    let pages = prompt('how many pages');
-    let read = prompt('did you read');
+function addBookToLibrary(e) {
+    e.preventDefault(); //stop form from submitting
+    let title = title_input.value;
+    let author = author_input.value;
+    let pages = totalPages_input.value;
+    let read = readStatus_input.checked;
     let currentBook = new Book(title,author,pages,read);
     myLibrary.push(currentBook);
     appendToContainer(currentBook);
