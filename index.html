@@ -10,8 +10,9 @@
     <body>
         <header></header>
         <main>
-            <button class="add-book">+</button>
-            <form class="show-onclick" action="" method="get">
+            <button type="button" class="add-book">+</button>
+            <form class="show-onclick" action="/" method="get">
+                <button type="button" class="close-form">Close</button>
                 <div>
                     <label for="title">Title:</label>
                     <input type="text" id="title" name="title" required placeholder="The Hobbit">
@@ -21,7 +22,7 @@
                     <input type="text" id="author" name="author" required placeholder="J.R.R Tolkien">
                 </div>
                 <div>
-                    <label for="page-number">Page number:</label>
+                    <label for="page-number">Total number of pages:</label>
                     <input type="number" id="page-number" name="page-number" required placeholder="295" min="0">
                 </div>
                 <div>
