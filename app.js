@@ -160,11 +160,12 @@ Library.prototype.addBook = function(book) {
     if (!checkForDuplicates(book)) {
         this.books.push(book);
         inputForm_form.reset();
-        // updateLibrary();
+        this.updateLibrary();
     } else {
-        console.log('DUPLICATE ALERT');
+        alert('You seem to already have this book in your library.');
     }
 }
+
 
 let checkForDuplicates = book => {
         return myLibrary.books.some(arrayBook => arrayBook.title.toLowerCase() === book.title.toLowerCase());       
@@ -174,6 +175,45 @@ function Library() {
     this.books = [];
 }
 
-Library.prototype.removeBook = function() {}
-Library.prototype.updateLibrary = function() {}
-Library.prototype.updateIndex = function() {}
+//the data-index that is used here is the one of the remove button, not(!) the one of the book-card div!!
+//after the splice you could also just call updateLibrary() and wouldn't even need updateIndex()
+Library.prototype.removeBook = function(e) {
+    let index = e.target.dataset.index;
+    this.books.splice(index, 1);
+    container_div.removeChild(container_div.childNodes[index]);
+    this.updateIndex();
+}
+
+Library.prototype.updateLibrary = function() {
+    container_div.innerHTML = '';
+    for(let i = 0; i < this.books.length; i++) {
+        const bookCard = document.createElement('div');
+        const rmButton = document.createElement('button');
+
+        rmButton.textContent = 'Remove Book';
+        rmButton.classList.add('rm-btn');
+        rmButton.setAttribute('data-index', i);
+
+        bookCard.classList.add('book-card');
+        bookCard.setAttribute('data-index', i);
+        container_div.append(bookCard);
+
+        for (let prop in this.books[i]) {                    
+            const item = document.createElement('p');           
+            item.textContent += this.books[i][prop];            
+            bookCard.append(item);            
+        }        
+        bookCard.append(rmButton);
+        rmButton.addEventListener('click', e => this.removeBook(e));       
+    }      
+}
+
+//update the data-index of the book-card divs and(!) and the remove buttons
+Library.prototype.updateIndex = function() {
+    const nodeList = container_div.childNodes;
+    for (let i = 0; i < nodeList.length; i++) {
+        nodeList[i].setAttribute('data-index', i);
+        nodeList[i].querySelector('.rm-btn').setAttribute('data-index', i);
+    }
+}
+
