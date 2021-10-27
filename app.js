@@ -110,25 +110,50 @@
 // //     rmBtnList_button.forEach(rmButton => rmButton.addEventListener('click', console.log('hi')));
 // // }
 
-const container_div = document.querySelector('.container');
-const addBook_button = document.querySelector('.add-book');
-const inputForm_form = document.querySelector('form');
+const openModal_button = document.querySelector('.open-modal');
+const closeModal_button = document.querySelector('.close-modal');
+const overlay_div = document.querySelector('.overlay');
+const alertOverlay_div = document.querySelector('.alert-overlay');
+const modal_div = document.querySelector('.modal');
+const alert_div = document.querySelector('.duplicate-alert');
+const closeAlert_button = document.querySelector('.duplicate-alert > button');
+const inputForm_form = document.querySelector('.modal-body');
+
 const title_input = document.getElementById('title');
 const author_input = document.getElementById('author');
 const totalPages_input = document.getElementById('page-number');
 const readStatus_input = document.getElementById('read-status');
-const submitForm_button = document.querySelector('button[type="submit"]');
-const clearForm_button = document.querySelector('button[type="reset"]');
-const closeForm_button = document.querySelector('.close-form');
+const submitForm_button = document.querySelector('.modal-body > button[type="submit"]');
+const clearForm_button = document.querySelector('.modal-body > button[type="reset"]');
+const container_div = document.querySelector('.container');
+
+
+openModal_button.onclick = () => toggleModalVisibility();
+closeModal_button.onclick = () => toggleModalVisibility();
+overlay_div.onclick = () => toggleModalVisibility();
+alertOverlay_div.onclick = () => toggleModalVisibility();
+closeAlert_button.onclick = () => toggleModalVisibility();
+
+
+function toggleModalVisibility() {
+    if (alert_div.classList.contains('active')) {
+        alert_div.classList.remove('active');
+        alertOverlay_div.classList.remove('active');
+    }
+    else {
+        inputForm_form.reset();
+        modal_div.classList.toggle('active');
+        overlay_div.classList.toggle('active');
+    }
+}
+
+function alertDuplicate() {
+    alert_div.classList.add('active');
+    alertOverlay_div.classList.add('active');
+}
+
 
 let myLibrary = new Library();
-
-addBook_button.onclick = () => toggleFormVisibility();
-closeForm_button.onclick = () => toggleFormVisibility();
-
-function toggleFormVisibility() {
-    inputForm_form.classList.toggle('show-onclick');
-}
 
 function Book() {
     this.title = title_input.value;
@@ -162,9 +187,10 @@ Library.prototype.addBook = function(book) {
         inputForm_form.reset();
         this.updateLibrary();
     } else {
-        alert('You seem to already have this book in your library.');
+        alertDuplicate();
     }
 }
+
 
 
 let checkForDuplicates = book => {
