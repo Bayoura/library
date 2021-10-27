@@ -4,16 +4,97 @@
     box-sizing: border-box;
 }
 
-.show-onclick {
-    display: none;
-}
-
 .book-card {
-    background-color: aqua;
+    background-color: hsl(174, 84%, 71%);
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
     width: 300px;
     display: inline-block;
+}
+
+.modal {
+    background-color: hsl(159deg 85% 92%);
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 300ms ease-out;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 600px;
+    max-width: 90%;
+    z-index: 5;
+}
+
+.modal.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+.modal-header {
+    border-bottom: 1px solid hsl(0, 0%, 0%);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 15px 20px;
+}
+
+.overlay {
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: 300ms ease-out;
+    background-color: hsl(260deg 27% 25% / 45%);
+    pointer-events: none;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.alert-overlay {
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: 300ms ease-out;
+    background-color: hsl(0 96% 89% / 45%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.alert-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.duplicate-alert {
+    border: 1px solid black;
+    width: 300px;
+    padding: 10px;
+    background-color: hsl(0, 98%, 82%);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-out;
+    z-index: 15;
+}
+
+.duplicate-alert.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+button {
+    cursor: pointer;
 }
