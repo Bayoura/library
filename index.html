@@ -10,28 +10,39 @@
     <body>
         <header></header>
         <main>
-            <button type="button" class="add-book">+</button>
-            <form class="show-onclick" action="/" method="get">
-                <button type="button" class="close-form">Close</button>
-                <div>
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" required placeholder="The Hobbit">
+            <button type="button" class="open-modal">+</button>
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>Title</h2>
+                    <button type="button" class="close-modal">Close</button>
                 </div>
-                <div>
-                    <label for="author">Author:</label>
-                    <input type="text" id="author" name="author" required placeholder="J.R.R Tolkien">
-                </div>
-                <div>
-                    <label for="page-number">Total number of pages:</label>
-                    <input type="number" id="page-number" name="page-number" required placeholder="295" min="0">
-                </div>
-                <div>
-                    <label for="read-status">Have you read it, yet?</label>
-                    <input type="checkbox" id="read-status" name="read-status">
-                </div>
-                <button type="reset">Clear</button>
-                <button type="submit">Submit</button>
-            </form>
+                <form class="modal-body" action="/" method="get">
+                    <div>
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required placeholder="The Hobbit">
+                    </div>
+                    <div>
+                        <label for="author">Author:</label>
+                        <input type="text" id="author" name="author" required placeholder="J.R.R Tolkien">
+                    </div>
+                    <div>
+                        <label for="page-number">Total number of pages:</label>
+                        <input type="number" id="page-number" name="page-number" required placeholder="295" min="0">
+                    </div>
+                    <div>
+                        <label for="read-status">Have you read it, yet?</label>
+                        <input type="checkbox" id="read-status" name="read-status">
+                    </div>
+                    <button type="reset">Clear</button>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="duplicate-alert">
+                <p>It seems this book already exists in your library!</p>
+                <button type="button">OK</button>
+            </div>
+            <div class="overlay"></div>
+            <div class="alert-overlay"></div>
             <div class="container"></div>
         </main>
         <footer></footer>
