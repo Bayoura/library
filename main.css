@@ -28,6 +28,14 @@
     z-index: 5;
 }
 
+.modal.edit {
+    background-color: rgb(24, 136, 117) ;
+}
+
+.modal.edit button {
+    background: rgb(190, 157, 94);
+}
+
 .modal.active {
     transform: translate(-50%, -50%) scale(1);
 }
@@ -97,4 +105,34 @@
 
 button {
     cursor: pointer;
+}
+
+.open-modal {
+    padding: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.edit-title {
+    display: none;
+}
+
+.edit-title.active {
+    display: block;
+}
+
+.add-title.hidden {
+    display: none;
+}
+
+.submit.hidden {
+    display: none;
+}
+
+.save {
+    display: none;
+}
+
+.save.active {
+    display: inline-block;
 }
