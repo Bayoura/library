@@ -123,7 +123,8 @@ const title_input = document.getElementById('title');
 const author_input = document.getElementById('author');
 const totalPages_input = document.getElementById('page-number');
 const readStatus_input = document.getElementById('read-status');
-const submitForm_button = document.querySelector('.modal-body > button[type="submit"]');
+const submitForm_button = document.querySelector('.submit');
+const saveEdit_button = document.querySelector('.save');
 const clearForm_button = document.querySelector('.modal-body > button[type="reset"]');
 const container_div = document.querySelector('.container');
 
@@ -134,6 +135,18 @@ overlay_div.onclick = () => toggleModalVisibility();
 alertOverlay_div.onclick = () => toggleModalVisibility();
 closeAlert_button.onclick = () => toggleModalVisibility();
 
+function Book() {
+    this.title = title_input.value;
+    this.author = author_input.value;
+    this.pages = totalPages_input.value;
+    this.read = readStatus_input.checked;
+}
+
+function Library() {
+    this.books = [];
+}
+
+let myLibrary = new Library();
 
 function toggleModalVisibility() {
     if (alert_div.classList.contains('active')) {
@@ -141,6 +154,12 @@ function toggleModalVisibility() {
         alertOverlay_div.classList.remove('active');
     }
     else {
+        modal_div.classList.remove('edit');
+        modal_div.querySelector('.add-title').classList.remove('hidden');
+        modal_div.querySelector('.edit-title').classList.remove('active');
+        submitForm_button.classList.remove('hidden');
+        saveEdit_button.classList.remove('active');
+
         inputForm_form.reset();
         modal_div.classList.toggle('active');
         overlay_div.classList.toggle('active');
@@ -152,14 +171,8 @@ function alertDuplicate() {
     alertOverlay_div.classList.add('active');
 }
 
-
-let myLibrary = new Library();
-
-function Book() {
-    this.title = title_input.value;
-    this.author = author_input.value;
-    this.pages = totalPages_input.value;
-    this.read = readStatus_input.checked;
+let checkForDuplicates = book => {
+    return myLibrary.books.some(arrayBook => arrayBook.title.toLowerCase() === book.title.toLowerCase());       
 }
 
 document.addEventListener('DOMContentLoaded', () => {    
@@ -169,18 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })    
 });
 
-    
-// function addBook(e) {
-//     e.preventDefault(); //stop form from submitting
-//     myLibrary.books.push(new Book);
-//     inputForm_form.reset();
-// }
-
-// submitForm_button.onclick = () => {
-//     const newBook = new Book();
-//     myLibrary.addBook(newBook);
-// }
-
 Library.prototype.addBook = function(book) {
     if (!checkForDuplicates(book)) {
         this.books.push(book);
@@ -189,16 +190,6 @@ Library.prototype.addBook = function(book) {
     } else {
         alertDuplicate();
     }
-}
-
-
-
-let checkForDuplicates = book => {
-        return myLibrary.books.some(arrayBook => arrayBook.title.toLowerCase() === book.title.toLowerCase());       
-}
-
-function Library() {
-    this.books = [];
 }
 
 //the data-index that is used here is the one of the remove button, not(!) the one of the book-card div!!
@@ -215,14 +206,20 @@ Library.prototype.updateLibrary = function() {
     for(let i = 0; i < this.books.length; i++) {
         const bookCard = document.createElement('div');
         const rmButton = document.createElement('button');
+        const editButton = document.createElement('button');
+
+        bookCard.classList.add('book-card');
+        bookCard.setAttribute('data-index', i);
+        container_div.append(bookCard);
 
         rmButton.textContent = 'Remove Book';
         rmButton.classList.add('rm-btn');
         rmButton.setAttribute('data-index', i);
 
-        bookCard.classList.add('book-card');
-        bookCard.setAttribute('data-index', i);
-        container_div.append(bookCard);
+        editButton.textContent = 'Edit Book';
+        editButton.classList.add('edit-btn');
+        editButton.setAttribute('data-index', i);
+
 
         for (let prop in this.books[i]) {                    
             const item = document.createElement('p');           
@@ -230,16 +227,65 @@ Library.prototype.updateLibrary = function() {
             bookCard.append(item);            
         }        
         bookCard.append(rmButton);
-        rmButton.addEventListener('click', e => this.removeBook(e));       
+        bookCard.append(editButton);
+        rmButton.addEventListener('click', e => this.removeBook(e));  
+        editButton.addEventListener('click', e => this.editBook(e));     
     }      
 }
 
-//update the data-index of the book-card divs and(!) and the remove buttons
+//update the data-index of the book-card divs and(!) and the remove and edit buttons
 Library.prototype.updateIndex = function() {
     const nodeList = container_div.childNodes;
     for (let i = 0; i < nodeList.length; i++) {
         nodeList[i].setAttribute('data-index', i);
         nodeList[i].querySelector('.rm-btn').setAttribute('data-index', i);
+        nodeList[i].querySelector('.edit-btn').setAttribute('data-index', i);
     }
 }
+
+Library.prototype.editBook = function(e) {
+    let index = e.target.dataset.index;
+    title_input.value = this.books[index].title;
+    author_input.value = this.books[index].author;
+    totalPages_input.value = this.books[index].pages;
+    readStatus_input.checked = this.books[index].read;
+    toggleEditVisibility();
+    toggleEditClasses()
+    saveEdit_button.onclick = e => saveEdit(index,e);
+}
+
+
+function toggleEditClasses() {
+    modal_div.classList.toggle('edit');
+    modal_div.querySelector('.add-title').classList.toggle('hidden');
+    modal_div.querySelector('.edit-title').classList.toggle('active');
+    submitForm_button.classList.toggle('hidden');
+    saveEdit_button.classList.toggle('active');
+}
+
+function saveEdit(index,e) {  
+    e.preventDefault(); //stop form from submitting   
+    const editedBook = new Book();
+    let isDuplicate = false;
+    for (let i = 0; i < myLibrary.books.length; i++) {
+        if (myLibrary.books[i].title.toLowerCase() === editedBook.title.toLowerCase() && i != index) {
+            alertDuplicate();
+            isDuplicate = true;
+        } 
+    }        
+    if (isDuplicate === false) {
+        myLibrary.books[index] = editedBook;          
+        myLibrary.updateLibrary();         
+        toggleEditClasses()         
+        toggleEditVisibility();   
+    } else {
+        return
+    }
+}
+
+function toggleEditVisibility() {
+    modal_div.classList.toggle('active');
+    overlay_div.classList.toggle('active');
+}
+
 
