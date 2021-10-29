@@ -110,8 +110,12 @@ Library.prototype.updateLibrary = function() {
         editButton.setAttribute('data-index', i);
 
         for (let prop in this.books[i]) {                    
-            const item = document.createElement('p');           
-            item.textContent += this.books[i][prop];            
+            const item = document.createElement('p');    
+            if (this.books[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
+            else if (this.books[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
+            else {
+                item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + this.books[i][prop];            
+            }
             bookCard.append(item);            
         }        
         bookCard.append(rmButton);
