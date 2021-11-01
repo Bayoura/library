@@ -105,6 +105,8 @@
 
 button {
     cursor: pointer;
+    padding: 3px;
+    font-size: 1rem;
 }
 
 .open-modal {
@@ -125,14 +127,14 @@ button {
     display: none;
 }
 
-.submit.hidden {
+.submit-btn.hidden {
     display: none;
 }
 
-.save {
+.save-btn {
     display: none;
 }
 
-.save.active {
+.save-btn.active {
     display: inline-block;
 }
