@@ -16,18 +16,14 @@ const saveEdit_button = document.querySelector('.save-btn');
 const clearForm_button = document.querySelector('.modal-body > button[type="reset"]');
 const container_div = document.querySelector('.container');
 
+let myLibrary = [];
+
 function Book() {
     this.title = title_input.value;
     this.author = author_input.value;
     this.pages = totalPages_input.value;
     this.read = readStatus_input.checked;
 }
-
-function Library() {
-    this.books = [];
-}
-
-let myLibrary = new Library();
 
 openModal_button.onclick = () => toggleModalVisibility();
 closeModal_button.onclick = () => toggleModalVisibility();
@@ -66,13 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let checkStatus = inputForm_form.checkValidity();
         inputForm_form.reportValidity();
         if (checkStatus) {
-            myLibrary.addBook(new Book);      
+            addBook(new Book);      
         }
     })    
 });
 
 let checkForDuplicates = book => {
-    return myLibrary.books.some(arrayBook => arrayBook.title.toLowerCase() === book.title.toLowerCase());       
+    return myLibrary.some(arrayBook => arrayBook.title.toLowerCase() === book.title.toLowerCase());       
 }
 
 function alertDuplicate() {
@@ -80,20 +76,20 @@ function alertDuplicate() {
     alertOverlay_div.classList.add('active');
 }
 
-Library.prototype.addBook = function(book) {
+function addBook(book) {
     if (!checkForDuplicates(book)) {
-        this.books.push(book);
+        myLibrary.push(book);
         inputForm_form.reset();
-        this.updateLibrary();
+        updateLibrary();
         toggleModalVisibility();
     } else {
         alertDuplicate();
     }
 }
 
-Library.prototype.updateLibrary = function() {
+function updateLibrary() {
     container_div.innerHTML = '';
-    for(let i = 0; i < this.books.length; i++) {
+    for(let i = 0; i < myLibrary.length; i++) {
         const bookCard = document.createElement('div');
         const rmButton = document.createElement('button');
         const editButton = document.createElement('button');
@@ -109,32 +105,32 @@ Library.prototype.updateLibrary = function() {
         editButton.classList.add('edit-btn');
         editButton.setAttribute('data-index', i);
 
-        for (let prop in this.books[i]) {                    
+        for (let prop in myLibrary[i]) {                    
             const item = document.createElement('p');    
-            if (this.books[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
-            else if (this.books[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
+            if (myLibrary[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
+            else if (myLibrary[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
             else {
-                item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + this.books[i][prop];            
+                item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + myLibrary[i][prop];            
             }
             bookCard.append(item);            
         }        
         bookCard.append(rmButton);
         bookCard.append(editButton);
-        rmButton.addEventListener('click', e => this.removeBook(e));  
-        editButton.addEventListener('click', e => this.editBook(e));     
+        rmButton.addEventListener('click', e => removeBook(e));  
+        editButton.addEventListener('click', e => editBook(e));     
     }      
 }
 
 //the data-index that is used here is the one of the remove button
 //after the splice you could also just call updateLibrary() and wouldn't even need updateIndex()
-Library.prototype.removeBook = function(e) {
+function removeBook(e) {
     let index = e.target.dataset.index;
-    this.books.splice(index, 1);
+    myLibrary.splice(index, 1);
     container_div.removeChild(container_div.childNodes[index]);
-    this.updateIndex();
+    updateIndex();
 }
 
-Library.prototype.updateIndex = function() {
+function updateIndex() {
     const nodeList = container_div.childNodes;
     for (let i = 0; i < nodeList.length; i++) {
         nodeList[i].querySelector('.rm-btn').setAttribute('data-index', i);
@@ -142,12 +138,12 @@ Library.prototype.updateIndex = function() {
     }
 }
 
-Library.prototype.editBook = function(e) {
+function editBook(e) {
     let index = e.target.dataset.index;
-    title_input.value = this.books[index].title;
-    author_input.value = this.books[index].author;
-    totalPages_input.value = this.books[index].pages;
-    readStatus_input.checked = this.books[index].read;
+    title_input.value = myLibrary[index].title;
+    author_input.value = myLibrary[index].author;
+    totalPages_input.value = myLibrary[index].pages;
+    readStatus_input.checked = myLibrary[index].read;
     toggleEditFormVisibility();
     toggleEditClasses()
     saveEdit_button.onclick = e => saveEdit(index,e);
@@ -174,16 +170,16 @@ function saveEdit(index,e) {
         if (checkStatus) {     
             const editedBook = new Book();
             let isDuplicate = false;
-            for (let i = 0; i < myLibrary.books.length; i++) {
+            for (let i = 0; i < myLibrary.length; i++) {
                 //it's only a duplicate if the user changes the book title to another already existing book in the library
-                if (myLibrary.books[i].title.toLowerCase() === editedBook.title.toLowerCase() && i != index) {
+                if (myLibrary[i].title.toLowerCase() === editedBook.title.toLowerCase() && i != index) {
                     alertDuplicate();
                     isDuplicate = true;
                 } 
             }        
             if (isDuplicate === false) {
-                myLibrary.books[index] = editedBook;          
-                myLibrary.updateLibrary();         
+                myLibrary[index] = editedBook;          
+                updateLibrary();         
                 toggleEditClasses()         
                 toggleEditFormVisibility();   
             } else {
@@ -192,5 +188,16 @@ function saveEdit(index,e) {
         }
 }
 
+//Local Storage
 
+if(!localStorage.getItem('library')) {   
+    populateStorage();
+    myLibrary = [];
+} else {    
+    myLibrary = JSON.parse(localStorage.getItem('library')); 
+} 
+  
+function populateStorage() {    
+    localStorage.setItem('library', JSON.stringify(myLibrary.books)); 
+}
 
