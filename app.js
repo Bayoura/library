@@ -6,11 +6,13 @@ const modal_div = document.querySelector('.modal');
 const alert_div = document.querySelector('.duplicate-alert');
 const closeAlert_button = document.querySelector('.duplicate-alert > button');
 const inputForm_form = document.querySelector('.modal-body');
+const delete_button = document.querySelector('.delete-library');
 
 const title_input = document.getElementById('title');
 const author_input = document.getElementById('author');
 const totalPages_input = document.getElementById('page-number');
 const readStatus_input = document.getElementById('read-status');
+const rating_input = document.getElementById('rating');
 const submitForm_button = document.querySelector('.submit-btn');
 const saveEdit_button = document.querySelector('.save-btn');
 const clearForm_button = document.querySelector('.modal-body > button[type="reset"]');
@@ -23,8 +25,10 @@ function Book() {
     this.author = author_input.value;
     this.pages = totalPages_input.value;
     this.read = readStatus_input.checked;
+    this.rating = rating_input.value;
 }
 
+delete_button.onclick = () => clearLibrary();
 openModal_button.onclick = () => toggleModalVisibility();
 closeModal_button.onclick = () => toggleModalVisibility();
 overlay_div.onclick = () => toggleModalVisibility();
@@ -54,6 +58,17 @@ function toggleModalVisibility() {
     }
 }
 
+function clearLibrary() {
+    if (myLibrary.length === 0) {
+        alert('Your library is already empty!');
+    } else if (confirm('Are you sure you want to delete your whole library?') == true) {
+        container_div.innerHTML = '';
+        myLibrary = [];
+        localStorage.clear();
+        updateLibrary(saveLocal());
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {    
     submitForm_button.addEventListener('click', e => {    
         e.preventDefault(); //stop form from submitting   
@@ -80,16 +95,16 @@ function addBook(book) {
     if (!checkForDuplicates(book)) {
         myLibrary.push(book);
         inputForm_form.reset();
-        updateLibrary();
+        updateLibrary(saveLocal());
         toggleModalVisibility();
     } else {
         alertDuplicate();
     }
 }
 
-function updateLibrary() {
+function updateLibrary(books) {
     container_div.innerHTML = '';
-    for(let i = 0; i < myLibrary.length; i++) {
+    for(let i = 0; i < books.length; i++) {
         const bookCard = document.createElement('div');
         const rmButton = document.createElement('button');
         const editButton = document.createElement('button');
@@ -105,12 +120,14 @@ function updateLibrary() {
         editButton.classList.add('edit-btn');
         editButton.setAttribute('data-index', i);
 
-        for (let prop in myLibrary[i]) {                    
+        for (let prop in books[i]) {                    
             const item = document.createElement('p');    
-            if (myLibrary[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
-            else if (myLibrary[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
+            if (books[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
+            else if (books[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
             else {
-                item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + myLibrary[i][prop];            
+                console.log(prop);
+                console.log(books[0][prop]);
+                item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + books[i][prop];            
             }
             bookCard.append(item);            
         }        
@@ -128,6 +145,7 @@ function removeBook(e) {
     myLibrary.splice(index, 1);
     container_div.removeChild(container_div.childNodes[index]);
     updateIndex();
+    saveLocal();
 }
 
 function updateIndex() {
@@ -179,7 +197,7 @@ function saveEdit(index,e) {
             }        
             if (isDuplicate === false) {
                 myLibrary[index] = editedBook;          
-                updateLibrary();         
+                updateLibrary(saveLocal());         
                 toggleEditClasses()         
                 toggleEditFormVisibility();   
             } else {
@@ -191,13 +209,14 @@ function saveEdit(index,e) {
 //Local Storage
 
 if(!localStorage.getItem('library')) {   
-    populateStorage();
     myLibrary = [];
 } else {    
     myLibrary = JSON.parse(localStorage.getItem('library')); 
+    updateLibrary(myLibrary);
 } 
-  
-function populateStorage() {    
-    localStorage.setItem('library', JSON.stringify(myLibrary.books)); 
-}
 
+function saveLocal() {
+    localStorage.setItem('library', JSON.stringify(myLibrary)); 
+    let books = JSON.parse(localStorage.getItem('library')); 
+    return books;
+}
