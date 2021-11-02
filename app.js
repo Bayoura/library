@@ -131,8 +131,8 @@ function updateLibrary(books) {
             }
             bookCard.append(item);            
         }        
-        bookCard.append(rmButton);
         bookCard.append(editButton);
+        bookCard.append(rmButton);
         rmButton.addEventListener('click', e => removeBook(e));  
         editButton.addEventListener('click', e => editBook(e));     
     }      
