@@ -8,15 +8,19 @@
     </head>
 
     <body>
-        <header></header>
+        <header>
+            <h1>Welcome to your personal Library!</h1>
+        </header>
         <main>
-            <button type="button" class="open-modal">+</button>
-            <button type="button" class="delete-library">Delete Library</button>
+            <div class="header-buttons">
+                <button type="button" class="open-modal">Add a book</button>
+                <button type="button" class="delete-library">Delete Library</button>
+            </div>
             <div class="modal">
                 <div class="modal-header">
                     <h2 class="add-title">Add a book</h2>
                     <h2 class="edit-title">Edit your book</h2>
-                    <button type="button" class="close-modal">Close</button>
+                    <button type="button" class="close-modal">close</button>
                 </div>
                 <form class="modal-body" action="/" method="get">
                     <div>
@@ -29,7 +33,7 @@
                     </div>
                     <div>
                         <label for="page-number">Total number of pages:</label>
-                        <input type="number" id="page-number" name="page-number" required placeholder="295" min="0">
+                        <input type="number" id="page-number" name="page-number" required placeholder="310" min="0">
                     </div>
                     <div>
                         <label for="read-status">Have you read it, yet?</label>
@@ -37,11 +41,13 @@
                     </div>
                     <div>
                         <label for="rating">Rating out of five:</label>
-                        <input type="number" id="rating" name="rating" min="0" max="5">
+                        <input type="number" id="rating" name="rating" min="0" max="5" placeholder="4">
                     </div>
-                    <button type="reset">Clear</button>
-                    <button class="submit-btn" type="submit">Submit</button>
-                    <button class="save-btn" type="submit">Save Edit</button>
+                    <div class="modal-buttons">
+                        <button class="submit-btn" type="submit">add</button>
+                        <button class="save-btn" type="submit">save</button>
+                        <button type="reset">clear</button>
+                    </div>
                 </form>
             </div>
             <div class="duplicate-alert">
