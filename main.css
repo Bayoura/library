@@ -1,54 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Sacramento&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+:root {
+    --darkBrown: hsl(28, 28%, 25%);
+    --eggShell: hsl(29, 56%, 85%);
+    --transpEggShell: hsla(29, 56%, 85%, 0.4);
+    --lightYellow: hsl(42, 72%, 76%);
+    --green: hsl(78, 44%, 47%);
+    --lightRed: hsl(16, 72%, 76%);
+}
+
+body {
+    font-family: 'Sacramento', cursive;
+    background-color: var(--transpEggShell);
+}
+
+h1 {
+    font-size: 2.5rem;
+    padding: 15px;
+    text-align: center;
+    background-color: var(--darkBrown);
+    color: var(--eggShell);
+}
+
+/* ----------------------BUTTONS------------------------ */
+
+button {
+    border-radius: 8px;
+    border: 5px dotted transparent;
+    cursor: pointer;
+    padding: 0px 10px;
+    font-size: 1.1rem;
+    font-family: 'Pacifico', cursive;
+    transition: 100ms ease-in;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+button:active {
+    border-color: var(--lightRed);
+}
+
+.header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px 0;
+}
+
+.delete-library:active {
+    border-color: var(--lightYellow);
+}
+
+.delete-library {
+    font-size: 1.4rem;
+    background-color: var(--lightRed);
+    color: var(--darkBrown);
+}
+
+.open-modal {
+    font-size: 1.4rem;
+    background-color: var(--lightYellow);
+    color: var(--darkBrown);
+}
+
+.modal button {
+    background-color: var(--green);
+    color: var(--darkBrown);
+}
+
+.modal-buttons {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    gap: 15px;
+}
+
+.modal-buttons > button {
+    width: 100px;
+}
+
+.book-card > button {
+    margin: 5px 10px 5px 0;
+    background-color: var(--darkBrown);
+    color: var(--eggShell);
+}
+
+.modal.edit button {
+    background: rgb(190, 157, 94);
+}
+/* ----------------------INPUT---------------------------- */
+
+input {
+    border-radius: 4px;
+    font-size: 1.2rem;
+    padding: 3px;
+    background-color: var(--darkBrown);
+    color: var(--eggShell);
+    border: none;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--transpEggShell);
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--eggShell);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--eggShell);
+}
+
 .book-card {
-    background-color: hsl(174, 84%, 71%);
-    border: 1px solid grey;
+    font-family: 'Pacifico', cursive;
+    font-size: 1.3rem;
+    background-color: var(--green);
+    color: var(--darkBrown);
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
     display: inline-block;
 }
 
+/* ---------------------------MODAL------------------------------- */
+
 .modal {
-    background-color: hsl(159deg 85% 92%);
+    background-color: var(--lightYellow);
+    color: var(--darkBrown);
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: 300ms ease-out;
-    border: 1px solid black;
     border-radius: 5px;
     width: 600px;
     max-width: 90%;
     z-index: 5;
 }
 
-.modal.edit {
-    background-color: rgb(24, 136, 117) ;
-}
-
-.modal.edit button {
-    background: rgb(190, 157, 94);
-}
-
-.modal.active {
-    transform: translate(-50%, -50%) scale(1);
-}
 .modal-header {
     border-bottom: 1px solid hsl(0, 0%, 0%);
+    background-color: var(--darkBrown);
+    color: var(--lightYellow);
+    font-size: 1.4rem;
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.modal-body {
+.modal-body > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body, .duplicate-alert {
     padding: 15px 20px;
+    font-family: 'Pacifico', cursive;
+    font-size: 1.2rem;
+}
+
+.modal.edit {
+    background-color: hsl(34, 71%, 72%);
+}
+
+
+.modal.active {
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .overlay {
@@ -90,7 +218,7 @@
     border: 1px solid black;
     width: 300px;
     padding: 10px;
-    background-color: hsl(0, 98%, 82%);
+    background-color: hsl(16, 72%, 76%);
     position: fixed;
     top: 50%;
     left: 50%;
@@ -101,18 +229,6 @@
 
 .duplicate-alert.active {
     transform: translate(-50%, -50%) scale(1);
-}
-
-button {
-    cursor: pointer;
-    padding: 3px;
-    font-size: 1rem;
-}
-
-.open-modal {
-    padding: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
 }
 
 .edit-title {
