@@ -106,11 +106,17 @@ function updateLibrary(books) {
     container_div.innerHTML = '';
     for(let i = 0; i < books.length; i++) {
         const bookCard = document.createElement('div');
+        const textContainer = document.createElement('div');
+        const buttonContainer = document.createElement('div');
         const rmButton = document.createElement('button');
         const editButton = document.createElement('button');
 
         bookCard.classList.add('book-card');
         container_div.append(bookCard);
+
+        textContainer.classList.add('book-card-text');
+        bookCard.append(textContainer);
+        buttonContainer.classList.add('book-card-buttons');
 
         rmButton.textContent = 'Remove Book';
         rmButton.classList.add('rm-btn');
@@ -129,10 +135,11 @@ function updateLibrary(books) {
                 console.log(books[0][prop]);
                 item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + books[i][prop];            
             }
-            bookCard.append(item);            
+            textContainer.append(item);            
         }        
-        bookCard.append(editButton);
-        bookCard.append(rmButton);
+        bookCard.append(buttonContainer);
+        buttonContainer.append(editButton);
+        buttonContainer.append(rmButton);
         rmButton.addEventListener('click', e => removeBook(e));  
         editButton.addEventListener('click', e => editBook(e));     
     }      
