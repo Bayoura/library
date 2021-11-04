@@ -1,3 +1,4 @@
+const stickyHeader_div = document.querySelector('.top-buttons');
 const container_div = document.querySelector('.container');
 const openModal_button = document.querySelector('.open-modal');
 const closeModal_button = document.querySelector('.close-modal');
@@ -16,6 +17,17 @@ const readStatus_input = document.getElementById('read-status');
 const rating_input = document.getElementById('rating');
 const submitForm_button = document.querySelector('.submit-btn');
 const saveEdit_button = document.querySelector('.save-btn');
+
+let headerOffset = stickyHeader_div.offsetTop; 
+window.onscroll = () => stickyHeader();
+
+function stickyHeader() {
+    if (window.pageYOffset > headerOffset) {
+        stickyHeader_div.classList.add('sticky');
+    } else {
+        stickyHeader_div.classList.remove('sticky');
+    }
+}
 
 let myLibrary = [];
 
