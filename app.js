@@ -1,3 +1,4 @@
+const container_div = document.querySelector('.container');
 const openModal_button = document.querySelector('.open-modal');
 const closeModal_button = document.querySelector('.close-modal');
 const overlay_div = document.querySelector('.overlay');
@@ -15,8 +16,6 @@ const readStatus_input = document.getElementById('read-status');
 const rating_input = document.getElementById('rating');
 const submitForm_button = document.querySelector('.submit-btn');
 const saveEdit_button = document.querySelector('.save-btn');
-const clearForm_button = document.querySelector('.modal-body > button[type="reset"]');
-const container_div = document.querySelector('.container');
 
 let myLibrary = [];
 
@@ -28,7 +27,7 @@ function Book() {
     this.rating = rating_input.value;
 }
 
-delete_button.onclick = () => clearLibrary();
+delete_button.onclick = () => deleteLibrary();
 openModal_button.onclick = () => toggleModalVisibility();
 closeModal_button.onclick = () => toggleModalVisibility();
 overlay_div.onclick = () => toggleModalVisibility();
@@ -58,7 +57,7 @@ function toggleModalVisibility() {
     }
 }
 
-function clearLibrary() {
+function deleteLibrary() {
     if (myLibrary.length === 0) {
         alert('Your library is already empty!');
     } else if (confirm('Are you sure you want to delete your whole library?') == true) {
@@ -128,11 +127,9 @@ function updateLibrary(books) {
 
         for (let prop in books[i]) {                    
             const item = document.createElement('p');    
-            if (books[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
-            else if (books[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
+            if (prop === 'read' && books[i][prop] === true) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Yes';      
+            else if (prop === 'read' && books[i][prop] === false) item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': Not yet';            
             else {
-                console.log(prop);
-                console.log(books[0][prop]);
                 item.textContent += prop[0].toUpperCase() + prop.slice(1) + ': ' + books[i][prop];            
             }
             textContainer.append(item);            
@@ -169,6 +166,7 @@ function editBook(e) {
     author_input.value = myLibrary[index].author;
     totalPages_input.value = myLibrary[index].pages;
     readStatus_input.checked = myLibrary[index].read;
+    rating_input.value = myLibrary[index].rating;
     toggleEditFormVisibility();
     toggleEditClasses()
     saveEdit_button.onclick = e => saveEdit(index,e);
@@ -196,7 +194,7 @@ function saveEdit(index,e) {
             const editedBook = new Book();
             let isDuplicate = false;
             for (let i = 0; i < myLibrary.length; i++) {
-                //it's only a duplicate if the user changes the book title to another already existing book in the library
+                //it's only a duplicate if the user changes the book title to another book already existing in the library
                 if (myLibrary[i].title.toLowerCase() === editedBook.title.toLowerCase() && i != index) {
                     alertDuplicate();
                     isDuplicate = true;
@@ -207,9 +205,7 @@ function saveEdit(index,e) {
                 updateLibrary(saveLocal());         
                 toggleEditClasses()         
                 toggleEditFormVisibility();   
-            } else {
-                return
-            }
+            } 
         }
 }
 
