@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Sacramento&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -49,25 +50,36 @@ button:active {
     border-color: var(--lightRed);
 }
 
-.header-buttons {
-    font-size: 1.3rem;
+.top-buttons {
     display: flex;
     justify-content: center;
     gap: 20px;
     margin: 15px 10px 30px 10px;
 }
 
+.top-buttons.sticky {
+    background-color: hsl(28, 55%, 94%);
+    margin: 0;
+    padding: 10px 0 15px 0;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+}
+
+.top-buttons > button {
+    font-size: 1.4rem;
+}
+
+.delete-library {
+    background-color: var(--lightRed);
+}
+
 .delete-library:active {
     border-color: var(--lightYellow);
 }
 
-.delete-library {
-    font-size: 1.4rem;
-    background-color: var(--lightRed);
-}
-
 .open-modal {
-    font-size: 1.4rem;
     background-color: var(--lightYellow);
 }
 
@@ -139,6 +151,7 @@ input {
 /* ---------------------------BOOK-CARDS--------------------- */
 
 .container {
+    padding-top: 30px;
     margin: 10px;
     display: grid;
     grid-template-columns: repeat(1,1fr);
@@ -146,11 +159,11 @@ input {
 }
 
 .book-card {
+    background-color: var(--green);
+    border-radius: 5px;
+    color: var(--darkBrown);
     font-family: 'Pacifico', cursive;
     font-size: 1.3rem;
-    background-color: var(--green);
-    color: var(--darkBrown);
-    border-radius: 5px;
     padding: 15px 20px;
     display: flex;
     flex-direction: column;
@@ -158,9 +171,10 @@ input {
     gap: 15px;
 }
 
-/* ---------------------------MODAL------------------------------- */
+/* ---------------------------MODALS-AND-OVERLAYS------------------------------- */
 
 .modal {
+    border-radius: 5px;
     background-color: var(--lightYellow);
     color: var(--darkBrown);
     position: fixed;
@@ -168,10 +182,9 @@ input {
     top: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: 300ms ease-out;
-    border-radius: 5px;
     width: 600px;
     max-width: 90%;
-    z-index: 5;
+    z-index: 10;
 }
 
 .modal-header {
@@ -183,10 +196,6 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.edit-title {
-    color: var(--eggShell);
 }
 
 .modal-item {
@@ -204,44 +213,16 @@ input {
     background-color: var(--green);
 }
 
-
-.modal.active {
-    transform: translate(-50%, -50%) scale(1);
+.edit-title {
+    color: var(--green);
 }
 
 .overlay {
-    position: fixed;
-    opacity: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: 300ms ease-out;
-    background-color: var(--transDarkBrown);
-    pointer-events: none;
-}
-
-.overlay.active {
-    opacity: 1;
-    pointer-events: all;
+    z-index: 5;
 }
 
 .alert-overlay {
-    position: fixed;
-    opacity: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: 300ms ease-out;
-    background-color: var(--transDarkBrown);
-    pointer-events: none;
-    z-index: 10;
-}
-
-.alert-overlay.active {
-    opacity: 1;
-    pointer-events: all;
+    z-index: 15;
 }
 
 .duplicate-alert {
@@ -256,14 +237,37 @@ input {
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: 200ms ease-out;
-    z-index: 15;
+    z-index: 20;
 }
 
-.duplicate-alert.active {
+.overlay, .alert-overlay {
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: 300ms ease-out;
+    background-color: var(--transDarkBrown);
+    pointer-events: none;
+}
+
+/* -----------------ACTIVE-AND-HIDDEN-CLASSES------------------ */
+
+.modal.active, .duplicate-alert.active {
     transform: translate(-50%, -50%) scale(1);
 }
 
-.edit-title {
+.overlay.active, .alert-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.edit-title,
+.save-btn,
+.add-title.hidden,
+.submit-btn.hidden
+{
     display: none;
 }
 
@@ -271,20 +275,30 @@ input {
     display: block;
 }
 
-.add-title.hidden {
-    display: none;
-}
-
-.submit-btn.hidden {
-    display: none;
-}
-
-.save-btn {
-    display: none;
-}
-
 .save-btn.active {
     display: inline-block;
+}
+
+/* -------------------FOOTER-------------------------- */
+
+footer {
+    font-family: 'Pacifico', cursive;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--darkBrown);
+}
+
+footer a {
+    font-weight: bold;
+    color: hsl(78, 30%, 29%);
+}
+
+footer a:hover {
+    color: var(--green);
+}
+
+footer a:active {
+    border: 3px dotted var(--green);
 }
 
 /* ---------------------RESPONSIVE-DESIGN-------------------- */
