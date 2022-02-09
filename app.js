@@ -6,24 +6,6 @@ class Book {
         this.read = readStatus_input.checked;
         this.rating = rating_input.value;
     }
-
-    toggleModalVisibility() {
-        if (alert_div.classList.contains('active')) {
-            alert_div.classList.remove('active');
-            alertOverlay_div.classList.remove('active');
-        }
-        else {
-            modal_div.classList.remove('edit');
-            modal_div.querySelector('.add-title').classList.remove('hidden');
-            modal_div.querySelector('.edit-title').classList.remove('active');
-            submitForm_button.classList.remove('hidden');
-            saveEdit_button.classList.remove('active');
-    
-            inputForm_form.reset();
-            modal_div.classList.toggle('active');
-            overlay_div.classList.toggle('active');
-        }
-    }
     
     deleteLibrary() {
         if (myLibrary.length === 0) {
@@ -184,8 +166,11 @@ const rating_input = document.getElementById('rating');
 const submitForm_button = document.querySelector('.submit-btn');
 const saveEdit_button = document.querySelector('.save-btn');
 
+const book = new Book();
 let myLibrary = [];
 
+
+// sticky header
 let headerOffset = stickyHeader_div.offsetTop; 
 window.onscroll = () => stickyHeader();
 
@@ -197,8 +182,26 @@ function stickyHeader() {
     }
 }
 
-const book = new Book();
+// modal
+function toggleModalVisibility() {
+    if (alert_div.classList.contains('active')) {
+        alert_div.classList.remove('active');
+        alertOverlay_div.classList.remove('active');
+    }
+    else {
+        modal_div.classList.remove('edit');
+        modal_div.querySelector('.add-title').classList.remove('hidden');
+        modal_div.querySelector('.edit-title').classList.remove('active');
+        submitForm_button.classList.remove('hidden');
+        saveEdit_button.classList.remove('active');
 
+        inputForm_form.reset();
+        modal_div.classList.toggle('active');
+        overlay_div.classList.toggle('active');
+    }
+}
+
+// event listeners
 delete_button.onclick = () => book.deleteLibrary();
 openModal_button.onclick = () => book.toggleModalVisibility();
 closeModal_button.onclick = () => book.toggleModalVisibility();
